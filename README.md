@@ -1,117 +1,117 @@
-# Project 1: Lexical Analyzer Using Lex
+# Lexical Analyzer Using Lex/Flex
 
-**Course:** CSE411 – Theory of Computation & Compilers  
-**University:** Alamein University – Faculty of Computer Science & Engineering  
-**Due:** 26/4/2026
-
----
-
-## Description
-
-This project implements a lexical analyzer (scanner) using **Flex** (the free, open-source version of Lex). The analyzer reads a C-like source file and classifies every character sequence into one of the following token types:
-
-| Token Type   | Description                                                  |
-|--------------|--------------------------------------------------------------|
-| KEYWORD      | Reserved words: `int`, `float`, `if`, `while`, `return`, … |
-| DIRECTIVE    | Preprocessor lines: `#include`, `#define`, …                |
-| IDENTIFIER   | User-defined names (variables, functions, …)                |
-| INTEGER      | Whole-number literals: `0`, `42`, `100`                     |
-| FLOAT        | Decimal/exponent literals: `3.14`, `1.5e2`, `0.001`         |
-| STRING       | Double-quoted string literals: `"hello"`                    |
-| CHAR_LIT     | Single-quoted character literals: `'A'`                     |
-| OPERATOR     | Arithmetic, relational, logical, assignment operators       |
-| DELIMITER    | Punctuation: `( ) { } [ ] ; , . :`                         |
-| COMMENT(SL)  | Single-line comment `// …`                                  |
-| COMMENT(ML)  | Multi-line comment `/* … */`                                |
-| UNKNOWN      | Any character that does not match a known pattern           |
-
-For each recognized token the analyzer prints its **line number**, **type**, and **value**. At the end it prints a **summary table** with per-category counts and total tokens.
+| | |
+|---|---|
+| **University** | Alamein University |
+| **Faculty** | Computer Science & Engineering |
+| **Course** | CSE411 – Theory of Computation & Compilers |
+| **Project** | Project 1 – Building a Lexical Analyzer Using Lex |
+| **Student** | Mohamed Alsariti |
+| **Due Date** | 26 April 2026 |
 
 ---
 
-## Files
+## Overview
+
+This project implements a **lexical analyzer (scanner)** using **Flex** — the open-source implementation of the Unix Lex tool. The analyzer accepts any C-like source file as input, scans it character by character, and groups character sequences into classified **tokens**. Each token is printed with its line number, type, and matched value. A summary report is produced at the end.
+
+---
+
+## Token Types
+
+| Token | Description | Examples |
+|---|---|---|
+| `KEYWORD` | Reserved language words | `int`, `if`, `while`, `return`, `true` |
+| `DIRECTIVE` | Preprocessor instructions | `#include <stdio.h>`, `#define MAX 100` |
+| `IDENTIFIER` | User-defined names | `main`, `factorial`, `isPrime` |
+| `INTEGER` | Whole-number literals | `0`, `42`, `100` |
+| `FLOAT` | Decimal / scientific literals | `3.14`, `0.0`, `1.5e2` |
+| `STRING` | Double-quoted string literals | `"hello"`, `"Alamein"` |
+| `CHAR_LIT` | Single-quoted character literals | `'A'`, `'\n'` |
+| `OPERATOR` | Arithmetic, relational, logical, assignment | `+`, `==`, `&&`, `+=`, `++` |
+| `DELIMITER` | Punctuation and separators | `(`, `)`, `{`, `}`, `;`, `,` |
+| `COMMENT(SL)` | Single-line comment | `// text` |
+| `COMMENT(ML)` | Multi-line block comment | `/* text */` |
+| `UNKNOWN` | Unrecognized character | any unexpected symbol |
+
+---
+
+## Project Structure
 
 ```
 toc-project/
-├── lexer.l          ← Flex source (the lexical analyzer)
-├── sample_input.c   ← Sample C-like program used as test input
-├── output.txt       ← Pre-generated output for sample_input.c
-└── README.md        ← This file
+├── lexer.l          — Flex source file (lexical analyzer)
+├── sample_input.c   — Sample C-like program used as test input
+├── output.txt       — Pre-generated output from running the analyzer
+└── README.md        — This file
 ```
 
 ---
 
 ## Requirements
 
-| Tool  | Version tested |
-|-------|---------------|
-| Flex  | 2.6.4         |
-| GCC   | 13+           |
-
-Install on Debian/Ubuntu:
-
-```bash
-sudo apt-get install flex gcc
-```
+| Dependency | Version | Install (Debian / Ubuntu) |
+|---|---|---|
+| Flex | 2.6+ | `sudo apt-get install flex` |
+| GCC | 9+ | `sudo apt-get install gcc` |
 
 ---
 
-## How to Compile and Run
+## Build & Run
 
-### Step 1 – Generate C source from the Flex file
+### 1. Generate C source from the Flex file
 
 ```bash
 flex -o lexer.c lexer.l
 ```
 
-### Step 2 – Compile the generated C source
+### 2. Compile
 
 ```bash
 gcc -o lexer lexer.c -lfl
 ```
 
-> The `-lfl` flag links the Flex runtime library. On some systems you may need
-> `-ll` instead, or remove it if `yywrap` is already defined (it is, in `lexer.l`).
+> On some systems use `-ll` instead of `-lfl`.
 
-### Step 3 – Run the analyzer
-
-**On a file:**
+### 3. Run on an input file
 
 ```bash
 ./lexer sample_input.c
 ```
 
-**Redirect output to a text file:**
+### 4. Save output to a file
 
 ```bash
-./lexer sample_input.c > my_output.txt
+./lexer sample_input.c > output.txt
 ```
 
-**Read from standard input (type / paste code, then Ctrl-D):**
+### 5. Read from standard input
 
 ```bash
 ./lexer
 ```
+Type or paste code, then press **Ctrl-D** to end input.
 
 ---
 
-## Sample Output (excerpt)
+## Sample Output
 
 ```
 =======================================================
   Lexical Analyzer  --  CSE411, Alamein University
+  Student: Mohamed Alsariti
 =======================================================
 
-[Line   4] COMMENT(ML) : (multi-line comment)
-[Line   6] DIRECTIVE   : #include <stdio.h>
-[Line  11] COMMENT(SL) : // Compute the factorial of n recursively
-[Line  12] KEYWORD     : int
-[Line  12] IDENTIFIER  : factorial
-[Line  12] DELIMITER   : (
-[Line  12] KEYWORD     : int
-[Line  12] IDENTIFIER  : n
-[Line  12] DELIMITER   : )
-[Line  12] DELIMITER   : {
+[Line   1] DIRECTIVE   : #include <stdio.h>
+[Line   2] DIRECTIVE   : #include <stdlib.h>
+[Line   4] DIRECTIVE   : #define MAX_SIZE 100
+[Line   6] KEYWORD     : int
+[Line   6] IDENTIFIER  : factorial
+[Line   6] DELIMITER   : (
+[Line   6] KEYWORD     : int
+[Line   6] IDENTIFIER  : n
+[Line   6] DELIMITER   : )
+[Line   6] DELIMITER   : {
 ...
 
 =======================================================
@@ -124,11 +124,11 @@ gcc -o lexer lexer.c -lfl
   Strings       : 4
   Operators     : 37
   Delimiters    : 85
-  Comments      : 9
+  Comments      : 0
   Unknown       : 0
 -------------------------------------------------------
-  TOTAL TOKENS  : 250
-  Lines scanned : 73
+  TOTAL TOKENS  : 241
+  Lines scanned : 61
 =======================================================
 ```
 
@@ -136,16 +136,25 @@ gcc -o lexer lexer.c -lfl
 
 ## How It Works
 
-The Flex file `lexer.l` is divided into three sections separated by `%%`:
+A Flex `.l` file is divided into three sections, each separated by `%%`.
 
-1. **Definitions section** – C headers, counter variables, named regex patterns  
-   (`DIGIT`, `LETTER`, `IDENTIFIER`, `INTEGER`, `FLOAT`, `STRING`).
+**Section 1 — Definitions**
+Named regular-expression patterns are declared here (e.g. `DIGIT`, `IDENTIFIER`, `FLOAT`). These act as reusable building blocks for the rules below.
 
-2. **Rules section** – Pattern–action pairs. Flex tries rules top-to-bottom and
-   applies the **longest match**. Keywords are listed before the `IDENTIFIER`
-   rule so reserved words are not misclassified. Multi-line comments use an
-   **exclusive start condition** (`%x BLOCK_COMMENT`) to consume everything
-   until `*/` is found, correctly tracking embedded newlines.
+**Section 2 — Rules**
+Each rule is a pattern–action pair. When the scanner finds the longest match for a pattern, it executes the corresponding action. Key design decisions:
 
-3. **User code section** – `main()` opens the input file (or `stdin`), calls
-   `yylex()`, and prints the summary report.
+- Keywords are listed **before** the `IDENTIFIER` rule so reserved words are never misclassified as identifiers.
+- Floats are matched **before** integers to ensure `3.14` is not split into `3` and `.14`.
+- Multi-line comments use an **exclusive start condition** (`%x BLOCK_COMMENT`). Once `/*` is matched, the scanner enters this state and consumes all characters — tracking newlines for accurate line counting — until `*/` is found.
+
+**Section 3 — User Code**
+The `main()` function opens the target file (or falls back to `stdin`), calls `yylex()` to start scanning, then prints the final token summary.
+
+---
+
+## Design Notes
+
+- **Longest-match rule**: Flex always selects the longest possible match, so `==` is tokenized as one `OPERATOR` rather than two `=` tokens.
+- **Line tracking**: A `line_number` counter is incremented on every newline, including newlines inside block comments.
+- **No unknown tokens**: The sample input produces zero unknown tokens, confirming full coverage of standard C-like syntax.
